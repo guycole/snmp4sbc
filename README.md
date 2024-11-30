@@ -20,7 +20,7 @@ WRT54GL Wireless Access Point (all client IP address via DHCP)
 
 ## The Plan (Raspberry Pi)
 1. Simple Start (Notification/Trap)
-    1. Goal: use the snmptrap(1) utility to generate notifications from a rPi to another host running tcpdump(8), which demonstrates routing between machines on UDP 162.
+    1. Goal: use the snmptrap(1) utility to generate notifications from a rPi to a manager host running tcpdump(8), which demonstrates routing between machines on UDP 162.
     1. On the agent (rPi) install the SNMP utilities by running ***apt-get install snmp***, which (in November, 2024) installs the Net-SNMP v5.9.3 utilities.
     1. On the manager, invoke tcpdump(8) (might need to be root) as ***tcpdump -v port 162***
     1. On the agent (rPi), tweak [trap-demo.sh](https://github.com/guycole/snmp4sbc/blob/main/bin/trap-demo.sh) to have the correct IP address of your manager and then invoke it.
@@ -30,7 +30,7 @@ WRT54GL Wireless Access Point (all client IP address via DHCP)
         ```
     1. snmptrapd(8) could also be used by the manager to log trap messages.
 1. Simple "Read Only" Agent
-    1. Goal: introduce a minimal SNMP agent configuration.
+    1. Goal: introduce a minimal SNMP agent configuration (rPi), and interrogate it from a manager host.
     1. On the agent (rPi) install the SNMP agent by running ***apt-get install snmpd***, which (in November, 2024) installs the Net-SNMP v5.9.3 SNMP agent.
         1. Verify working installation by invoking ***systemctl status snmpd***, the response should be similar to this:
         ```
@@ -43,10 +43,24 @@ WRT54GL Wireless Access Point (all client IP address via DHCP)
              CGroup: /system.slice/snmpd.service
                      └─1232 /usr/sbin/snmpd -LOw -u Debian-snmp -g Debian-snmp -I -smux mteTrigger mteTrigger> 
         ```
-    1.  Now update the agent configuration, use [simple.conf](somewhere) by copying it to overwrite /etc/snmp/snmpd.conf
+    1. Now update the agent configuration, use [simple.conf](somewhere) by copying it to overwrite /etc/snmp/snmpd.conf
+    1. Restart the agent by invoking ***systemctl restart snmpd***
+    1. Request the system MIB contents by invoking ***snmpwalk -v 2c -c public 192.168.1.113 1.3.6.1.2.1.1*** (be sure to replace the address 192.168.1.113 with the IP address of your rPi).  The result should look like:
+        ```
+        SNMPv2-MIB::sysDescr.0 = STRING: Linux rpi4e 6.6.31+rpt-rpi-v8 #1 SMP PREEMPT Debian 1:6.6.31-1+rpt1 (2024-05-29) aarch64
+        SNMPv2-MIB::sysObjectID.0 = OID: NET-SNMP-MIB::netSnmpAgentOIDs.10
+        DISMAN-EVENT-MIB::sysUpTimeInstance = Timeticks: (19905) 0:03:19.05
+        SNMPv2-MIB::sysContact.0 = STRING: "hax4bux”
+        SNMPv2-MIB::sysName.0 = STRING: rpi4e
+        SNMPv2-MIB::sysLocation.0 = STRING: "shasta"
+        (etc, etc..)
+        ```
 
 
-        1. Note that user/group is \"Debian-snmp\"
+
+
+        1. Note that user/group is \"Debian-ssnmpwalk -v 2c -c public 192.168.1.113 1.3.6.1.2.1.1 
+nmp\"
         1. Configuration /etc/snmp/snmpd.conf or /var/lib/snmp/snmpd.conf
         1. ***snmpwalk -v 2c -c public 192.168.1.113 1.3.6.1.2***
 ## The Plan (BeagleBone Black)
