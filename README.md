@@ -38,8 +38,7 @@ WRT54GL Wireless Access Point (all client IP address via DHCP)
       Tasks: 1 (limit: 8731)
         CPU: 29.445s
      CGroup: /system.slice/snmpd.service
-             └─1232 /usr/sbin/snmpd -LOw -u Debian-snmp -g Debian-snmp -I -smux mteTrigger mteTrigger>
-```
+             └─1232 /usr/sbin/snmpd -LOw -u Debian-snmp -g Debian-snmp -I -smux mteTrigger mteTrigger>```
         1. Note that user/group is "Debian-snmp"
         1. Configuration /etc/snmp/snmpd.conf or /var/lib/snmp/snmpd.conf
         1. ***snmpwalk -v 2c -c public 192.168.1.113 1.3.6.1.2***
