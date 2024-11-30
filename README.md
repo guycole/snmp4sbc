@@ -45,7 +45,7 @@ WRT54GL Wireless Access Point (all client IP address via DHCP)
         ```
     1. Now update the agent configuration, use [simple.conf](somewhere) by copying it to overwrite /etc/snmp/snmpd.conf
     1. Restart the agent by invoking ***systemctl restart snmpd***
-    1. Request the system MIB contents by invoking ***snmpwalk -v 2c -c public 192.168.1.113 1.3.6.1.2.1.1*** (be sure to replace the address 192.168.1.113 with the IP address of your rPi).  The result should look like:
+    1. Request the system MIB contents by invoking ***snmpwalk -v 2c -c public 192.168.1.113 1.3.6.1.2.1.1*** (replace the address 192.168.1.113 with the IP address of your rPi).  The result should look like:
         ```
         SNMPv2-MIB::sysDescr.0 = STRING: Linux rpi4e 6.6.31+rpt-rpi-v8 #1 SMP PREEMPT Debian 1:6.6.31-1+rpt1 (2024-05-29) aarch64
         SNMPv2-MIB::sysObjectID.0 = OID: NET-SNMP-MIB::netSnmpAgentOIDs.10
@@ -56,13 +56,6 @@ WRT54GL Wireless Access Point (all client IP address via DHCP)
         (etc, etc..)
         ```
 
-
-
-
-        1. Note that user/group is \"Debian-ssnmpwalk -v 2c -c public 192.168.1.113 1.3.6.1.2.1.1 
-nmp\"
-        1. Configuration /etc/snmp/snmpd.conf or /var/lib/snmp/snmpd.conf
-        1. ***snmpwalk -v 2c -c public 192.168.1.113 1.3.6.1.2***
 ## The Plan (BeagleBone Black)
 1. Net-SNMP installation notes
 1. Register BeagleBone boot via notification/trap and share IP address
