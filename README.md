@@ -30,7 +30,7 @@ WRT54GL Wireless Access Point (all client IP address via DHCP)
 1. Simple "Read Only" Agent
     1. Goal: introduce a minimal SNMP agent configuration.
     1. On the agent (rPi) install the SNMP agent by running ***apt-get install snmpd***, which (in November, 2024) installs the Net-SNMP v5.9.3 SNMP agent.
-        1. Verify happy installation by invoking ***systemctl status snmpd***, the response should be similar to this:
+        1. Verify working installation by invoking ***systemctl status snmpd***, the response should be similar to this:
 ```
 ● snmpd.service - Simple Network Management Protocol (SNMP) Daemon.
      Loaded: loaded (/lib/systemd/system/snmpd.service; enabled; preset: enabled)
@@ -42,7 +42,10 @@ WRT54GL Wireless Access Point (all client IP address via DHCP)
              └─1232 /usr/sbin/snmpd -LOw -u Debian-snmp -g Debian-snmp -I -smux mteTrigger mteTrigger> 
 ```
 
-        1. Note that user/group is "Debian-snmp"
+    1.  Now update the agent configuration, use [simple.conf](somewhere) by copying it to overwrite /etc/snmp/snmpd.conf
+    
+
+        1. Note that user/group is \"Debian-snmp\"
         1. Configuration /etc/snmp/snmpd.conf or /var/lib/snmp/snmpd.conf
         1. ***snmpwalk -v 2c -c public 192.168.1.113 1.3.6.1.2***
 ## The Plan (BeagleBone Black)
