@@ -42,6 +42,7 @@ WRT54GL Wireless Access Point (all client IP address via DHCP)
              CGroup: /system.slice/snmpd.service
                      └─1232 /usr/sbin/snmpd -LOw -u Debian-snmp -g Debian-snmp -I -smux mteTrigger mteTrigger> 
         ```
+    1. Surprisingly (for a systemd service) journalctl does not contain the agent logs.  snmpd(8) logs to /var/log/snmpd.log
     1. Now update the agent configuration, use [simple.conf](https://github.com/guycole/snmp4sbc/blob/main/config/simple.conf) by copying it to overwrite /etc/snmp/snmpd.conf
     1. Restart the agent by invoking ***systemctl restart snmpd***
     1. Request the system MIB contents by invoking ***snmpwalk -v 2c -c public 192.168.1.113 1.3.6.1.2.1.1*** (replace the address 192.168.1.113 with the IP address of your rPi).  The result should look like:
@@ -67,7 +68,15 @@ WRT54GL Wireless Access Point (all client IP address via DHCP)
    
         ```
     1. If you restart the agent again, there will be two traps: One for "shut down" and then "cold start".
- 
+1. Use MIB names instead of raw OID
+    1. One component of SNMP is the [Management Information Base (MIB)](https://en.wikipedia.org/wiki/Management_information_base)
+    1. I have purposely ignored MIB because they were not essential to getting started.
+    1. The agent and utilities share a common configuration file "/etc/snmp/snmp.conf"
+    1. On your manager, locate the "snmp.conf" file and update the "mibdirs" variable
+        1. On my manager, "/usr/share/snmp/mibs" contains enough freely available MIB to work.
+    1. Verify you can now reference items by name instead of OID
+        1. ***snmpwalk -v 2c -c public 192.168.1.113 system***
+
 ## The Plan (BeagleBone Black)
 1. Net-SNMP installation notes
 1. Register BeagleBone boot via notification/trap and share IP address
