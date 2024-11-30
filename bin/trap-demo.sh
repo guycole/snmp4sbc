@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Title: trap-demo.sh
-# Description: minimal example of notification
+# Description: minimal notification example (uptime)
 # Development Environment: Ubuntu 22.04.5 LTS (Jammy Jellyfish)
 # Author: G.S. Cole (guycole at gmail dot com)
 #
