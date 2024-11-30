@@ -42,7 +42,7 @@ WRT54GL Wireless Access Point (all client IP address via DHCP)
              CGroup: /system.slice/snmpd.service
                      └─1232 /usr/sbin/snmpd -LOw -u Debian-snmp -g Debian-snmp -I -smux mteTrigger mteTrigger> 
         ```
-    1. Now update the agent configuration, use [simple.conf](somewhere) by copying it to overwrite /etc/snmp/snmpd.conf
+    1. Now update the agent configuration, use [simple.conf](https://github.com/guycole/snmp4sbc/blob/main/config/simple.conf) by copying it to overwrite /etc/snmp/snmpd.conf
     1. Restart the agent by invoking ***systemctl restart snmpd***
     1. Request the system MIB contents by invoking ***snmpwalk -v 2c -c public 192.168.1.113 1.3.6.1.2.1.1*** (replace the address 192.168.1.113 with the IP address of your rPi).  The result should look like:
         ```
@@ -54,7 +54,20 @@ WRT54GL Wireless Access Point (all client IP address via DHCP)
         SNMPv2-MIB::sysLocation.0 = STRING: "shasta"
         (etc, etc..)
         ```
-
+1. Configure SNMP agent to generate start/shutdown traps
+    1. Goal: configure the SNMP agent to generate SNMPv2-MIB::coldStart and UCD-SNMP-MIB::ucdShutDown 
+    1. On the manager, invoke tcpdump(8) as ***tcpdump -v port 162***
+    1. On the agent (rPi) update the configuration by copying [simple_with_trap.conf](https://github.com/guycole/snmp4sbc/blob/main/config/simple_with_trap.conf) to replace /etc/snmp/snmpd.conf
+        1. Update the IP address to match your manager
+    1. Restart the agent by invoking ***systemctl restart snmpd***
+    1. On the agent (rPi) install the SNMP agent by running ***apt-get install snmpd***, which (in November, 2024) installs the Net-SNMP v5.9.3 SNMP agent.
+    1. Note that when you restart the agent, a trap is now generated to announce "coldStart"  From tcpdump(8) it looks like:
+        ```
+        09:19:32.472153 IP (tos 0x0, ttl 64, id 54386, offset 0, flags [DF], proto UDP (17), length 123) 192.168.1.113.52157 > waifu.snmp-trap:  { SNMPv2c { V2Trap(80) R=133045648  system.sysUpTime.0=21 S:1.1.4.1.0=S:1.1.5.1 S:1.1.4.3.0=E:8072.3.2.10 } } 
+   
+        ```
+    1. If you restart the agent again, there will be two traps: One for "shut down" and then "cold start".
+ 
 ## The Plan (BeagleBone Black)
 1. Net-SNMP installation notes
 1. Register BeagleBone boot via notification/trap and share IP address
