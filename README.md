@@ -42,7 +42,7 @@ WRT54GL Wireless Access Point (all client IP address via DHCP)
              CGroup: /system.slice/snmpd.service
                      └─1232 /usr/sbin/snmpd -LOw -u Debian-snmp -g Debian-snmp -I -smux mteTrigger mteTrigger> 
         ```
-    1. Surprisingly (for a systemd service) journalctl does not contain the agent logs.  snmpd(8) logs to /var/log/snmpd.log
+    1. Surprisingly (for a systemd(1) service) journalctl(1) does not contain the agent logs.  snmpd(8) logs to /var/log/snmpd.log
     1. Now update the agent (rPi) configuration, use [simple.conf](https://github.com/guycole/snmp4sbc/blob/main/config/simple.conf) by copying it to overwrite /etc/snmp/snmpd.conf
     1. Restart the agent (rPi) by invoking ***systemctl restart snmpd***
     1. Request the system MIB contents by invoking ***snmpwalk -v 2c -c public 192.168.1.113 1.3.6.1.2.1.1*** (replace the address 192.168.1.113 with the IP address of your rPi).  The result should look like:
