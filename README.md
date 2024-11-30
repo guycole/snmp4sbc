@@ -78,8 +78,8 @@ WRT54GL Wireless Access Point (all client IP address via DHCP)
         1. ***snmpwalk -v 2c -c public 192.168.1.113 system***
 1. Monitor Raspberry Pi using the "Host Resources MIB"
     1. Net-SNMP agent can report on host resources such as date/time, file systems, CPU, memory, etc.
-    1. The [HOST-RESOURCES-MIB](http://net-snmp.org/docs/mibs/host.html) defines how to access this information.
-    1. Example ***snmpwalk -v 2c -c public 192.168.1.113 host***
+    1. The [HOST-RESOURCES-MIB](http://www.net-snmp.org/docs/mibs/host.html) defines how to access this information.
+    1. Example: ***snmpwalk -v 2c -c public 192.168.1.113 host***
         ```
         HOST-RESOURCES-MIB::hrSystemUptime.0 = Timeticks: (1117912) 3:06:19.12
         HOST-RESOURCES-MIB::hrSystemDate.0 = STRING: 2024-11-30,20:25:29.0,+0:0
