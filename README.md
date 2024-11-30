@@ -12,9 +12,8 @@ I am writing this in November, 2024 and the current source version of Net-SNMP i
 WRT54GL Wireless Access Point (all client IP address via DHCP)
 
 | host  | IP address    | interface | role    | type                           | operating system                       |
-|-------|---------------|-----------|---------|--------------------------------|---------------------------------------|
+|-------|---------------|-----------|---------|--------------------------------|----------------------------------------|
 | bb11  | 192.168.1.109 | wlan0     | agent   | beaglebone black wireless      | AM335x 11.7 2023-09-02 4GB microSD IoT |
-| boris | 192.168.1.105 | en1       | manager | Mac Mini late 2014             | Monterey 12.7.6                        |
 | rpi4e | 192.168.1.113 | wlan0     | agent   | raspberry pi 4                 | 2024-03-15 64bit rPi OS                |
 | waifu | 192.168.1.126 | wlp0s20f3 | manager | Lenovo Notebook P/N 21FVX001US | Ubuntu 22.04.5 LTS (Jammy Jellyfish)   |
 
