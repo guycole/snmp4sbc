@@ -43,8 +43,8 @@ WRT54GL Wireless Access Point (all client IP address via DHCP)
                      └─1232 /usr/sbin/snmpd -LOw -u Debian-snmp -g Debian-snmp -I -smux mteTrigger mteTrigger> 
         ```
     1. Surprisingly (for a systemd service) journalctl does not contain the agent logs.  snmpd(8) logs to /var/log/snmpd.log
-    1. Now update the agent configuration, use [simple.conf](https://github.com/guycole/snmp4sbc/blob/main/config/simple.conf) by copying it to overwrite /etc/snmp/snmpd.conf
-    1. Restart the agent by invoking ***systemctl restart snmpd***
+    1. Now update the agent (rPi) configuration, use [simple.conf](https://github.com/guycole/snmp4sbc/blob/main/config/simple.conf) by copying it to overwrite /etc/snmp/snmpd.conf
+    1. Restart the agent (rPi) by invoking ***systemctl restart snmpd***
     1. Request the system MIB contents by invoking ***snmpwalk -v 2c -c public 192.168.1.113 1.3.6.1.2.1.1*** (replace the address 192.168.1.113 with the IP address of your rPi).  The result should look like:
         ```
         SNMPv2-MIB::sysDescr.0 = STRING: Linux rpi4e 6.6.31+rpt-rpi-v8 #1 SMP PREEMPT Debian 1:6.6.31-1+rpt1 (2024-05-29) aarch64
@@ -56,18 +56,18 @@ WRT54GL Wireless Access Point (all client IP address via DHCP)
         (etc, etc..)
         ```
 1. Configure SNMP agent to generate start/shutdown traps
-    1. Goal: configure the SNMP agent to generate SNMPv2-MIB::coldStart and UCD-SNMP-MIB::ucdShutDown 
+    1. Goal: configure the SNMP agent (rPi) to generate SNMPv2-MIB::coldStart and UCD-SNMP-MIB::ucdShutDown 
     1. On the manager, invoke tcpdump(8) as ***tcpdump -v port 162***
     1. On the agent (rPi) update the configuration by copying [simple_with_trap.conf](https://github.com/guycole/snmp4sbc/blob/main/config/simple_with_trap.conf) to replace /etc/snmp/snmpd.conf
         1. Update the IP address to match your manager
-    1. Restart the agent by invoking ***systemctl restart snmpd***
+    1. Restart the agent (rPi) by invoking ***systemctl restart snmpd***
     1. On the agent (rPi) install the SNMP agent by running ***apt-get install snmpd***, which (in November, 2024) installs the Net-SNMP v5.9.3 SNMP agent.
     1. Note that when you restart the agent, a trap is now generated to announce "coldStart"  From tcpdump(8) it looks like:
         ```
         09:19:32.472153 IP (tos 0x0, ttl 64, id 54386, offset 0, flags [DF], proto UDP (17), length 123) 192.168.1.113.52157 > waifu.snmp-trap:  { SNMPv2c { V2Trap(80) R=133045648  system.sysUpTime.0=21 S:1.1.4.1.0=S:1.1.5.1 S:1.1.4.3.0=E:8072.3.2.10 } } 
    
         ```
-    1. If you restart the agent again, there will be two traps: One for "shut down" and then "cold start".
+    1. If you restart the agent (rPi) again, there will be two traps: One for "shut down" and then "cold start".
 1. Use MIB names instead of raw OID
     1. One component of SNMP is the [Management Information Base (MIB)](https://en.wikipedia.org/wiki/Management_information_base)
     1. I have purposely ignored MIB because they were not essential to getting started.
