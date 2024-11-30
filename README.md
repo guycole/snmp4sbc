@@ -76,6 +76,22 @@ WRT54GL Wireless Access Point (all client IP address via DHCP)
         1. On my manager, "/usr/share/snmp/mibs" contains enough freely available MIB to work.
     1. Verify you can now reference items by name instead of OID
         1. ***snmpwalk -v 2c -c public 192.168.1.113 system***
+1. Monitor Raspberry Pi using the "Host Resources MIB"
+    1. Net-SNMP agent can report on host resources such as date/time, file systems, CPU, memory, etc.
+    1. The [HOST-RESOURCES-MIB](http://net-snmp.org/docs/mibs/host.html) defines how to access this information.
+    1. Example ***snmpwalk -v 2c -c public 192.168.1.113 host***
+        ```
+        HOST-RESOURCES-MIB::hrSystemUptime.0 = Timeticks: (1117912) 3:06:19.12
+        HOST-RESOURCES-MIB::hrSystemDate.0 = STRING: 2024-11-30,20:25:29.0,+0:0
+        HOST-RESOURCES-MIB::hrSystemInitialLoadDevice.0 = INTEGER: 393216
+        HOST-RESOURCES-MIB::hrSystemInitialLoadParameters.0 = STRING: "coherent_pool=1M 8250.nr_uarts=0 snd_bcm2835.enable_headphones=0 snd_bcm2835.enable_headphones=1 snd_bcm2835.enable_hdmi=1 snd_b"
+        HOST-RESOURCES-MIB::hrSystemNumUsers.0 = Gauge32: 5
+        HOST-RESOURCES-MIB::hrSystemProcesses.0 = Gauge32: 206
+        HOST-RESOURCES-MIB::hrSystemMaxProcesses.0 = INTEGER: 0
+        HOST-RESOURCES-MIB::hrMemorySize.0 = INTEGER: 7997476 KBytes
+        HOST-RESOURCES-MIB::hrStorageIndex.1 = INTEGER: 1
+        (etc, etc...)
+        ```
 
 ## The Plan (BeagleBone Black)
 1. Net-SNMP installation notes
