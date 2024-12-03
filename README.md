@@ -1,5 +1,5 @@
 # snmp4sbc
-SNMP for Single Board Computers
+SNMP for Single Board Computers (i.e. "BeagleBone Black" or "Raspberry Pi")
 
 ## Introduction
 This project is to share my experience using [SNMP](https://en.wikipedia.org/wiki/Simple_Network_Management_Protocol) to manage a fleet of single board computers such as [BeagleBone Black](https://beagleboard.org/black) (etc) or the [Raspberry Pi](https://en.wikipedia.org/wiki/Raspberry_Pi) (etc).
@@ -13,7 +13,7 @@ WRT54GL Wireless Access Point (all client IP address via DHCP)
 
 | host  | IP address    | interface | role    | type                           | operating system                       |
 |-------|---------------|-----------|---------|--------------------------------|----------------------------------------|
-| bb11  | 192.168.1.109 | wlan0     | agent   | beaglebone black wireless      | AM335x 11.7 2023-09-02 4GB microSD IoT |
+| bb11  | 192.168.1.109 | wlan0     | agent   | beaglebone black wireless      | Debian 10 Buster                       |
 | rpi4e | 192.168.1.113 | wlan0     | agent   | raspberry pi 4                 | 2024-03-15 64bit rPi OS                |
 | waifu | 192.168.1.126 | wlp0s20f3 | manager | Lenovo Notebook P/N 21FVX001US | Ubuntu 22.04.5 LTS (Jammy Jellyfish)   |
 
@@ -69,15 +69,14 @@ WRT54GL Wireless Access Point (all client IP address via DHCP)
         ```
     1. If you restart the agent (rPi) again, there will be two traps: One for "shut down" and then "cold start".
 1. Use MIB names instead of raw OID
-    1. One component of SNMP is the [Management Information Base (MIB)](https://en.wikipedia.org/wiki/Management_information_base)
-    1. I have purposely ignored MIB because they were not essential to getting started.
+    1. Goal: refer to objects by name instead of using raw OID.  A component of SNMP is the [Management Information Base (MIB)](https://en.wikipedia.org/wiki/Management_information_base)
     1. The agent and utilities share a common configuration file "/etc/snmp/snmp.conf"
     1. On your manager, locate the "snmp.conf" file and update the "mibdirs" variable
         1. On my manager, "/usr/share/snmp/mibs" contains enough freely available MIB to work.
     1. Verify you can now reference items by name instead of OID
         1. ***snmpwalk -v 2c -c public 192.168.1.113 system***
 1. Monitor Raspberry Pi using the "Host Resources MIB"
-    1. Net-SNMP agent can report on host resources such as date/time, file systems, CPU, memory, etc.
+    1. Goal: access host resources such as date/time, file systems, CPU, memory, etc.
     1. The [HOST-RESOURCES-MIB](http://www.net-snmp.org/docs/mibs/host.html) defines how to access this information.
     1. Example: ***snmpwalk -v 2c -c public 192.168.1.113 host***
         ```
