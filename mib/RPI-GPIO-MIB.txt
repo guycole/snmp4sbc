@@ -1,0 +1,63 @@
+RPI-GPIO-MIB DEFINITIONS ::= BEGIN
+
+--
+-- resides in /usr/local/share/snmp/mibs
+-- $MIBS="+RPI-GPIO-MIB"
+-- snmptranslate -IR guycole
+-- mib2c guycole
+--
+
+IMPORTS
+    OBJECT-TYPE, NOTIFICATION-TYPE, MODULE-IDENTITY,
+    Integer32, Opaque, enterprises, Counter32, Unsigned32
+        FROM SNMPv2-SMI
+
+    TEXTUAL-CONVENTION, DisplayString
+	FROM SNMPv2-TC;
+
+guycole MODULE-IDENTITY
+    LAST-UPDATED "202412010000Z"
+    ORGANIZATION "Guy Cole"
+    CONTACT-INFO "email: guycole@gmail.com"
+    DESCRIPTION "gpio for rpi"
+    ::= { enterprises 5088 }
+
+gpioChipTable OBJECT-TYPE
+    SYNTAX	SEQUENCE OF GpioChipEntry
+    MAX-ACCESS	not-accessible
+    STATUS	current
+    DESCRIPTION
+	"A table containing GPIO chips."
+    ::= { guycole 1 }
+
+gpioChipEntry OBJECT-TYPE
+    SYNTAX	GpioChipEntry
+    MAX-ACCESS	not-accessible
+    STATUS	current
+    DESCRIPTION
+        "An entry containing a GPIO chip name."
+    INDEX	{ gpioChipIndex }
+    ::= { gpioChipTable  1 }
+
+GpioChipEntry ::= SEQUENCE {
+    gpioChipIndex Integer32,
+    gpioChipName  DisplayString
+}
+
+gpioChipIndex OBJECT-TYPE
+    SYNTAX	Integer32 (0..65535)
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION
+	"Reference Index for each GPIO chip."
+    ::= { gpioChipEntry 1 }
+
+gpioChipName OBJECT-TYPE
+    SYNTAX	DisplayString
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION
+	"The chip name."
+    ::= { gpioChipEntry 2 }
+
+END
